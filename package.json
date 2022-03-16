@@ -1,0 +1,12 @@
+{
+  "name": "felixir-dao",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/yamapyblack/felixir-dao.git",
+  "author": "yamapyblack <s25050730r@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/**"
+  ]
+}
