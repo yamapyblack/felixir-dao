@@ -5,6 +5,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@openzeppelin/contracts": "^4.5.0",
     "hardhat": "^2.9.1"
   },
   "devDependencies": {
