@@ -16,6 +16,8 @@ module.exports = {
     ecmaVersion: 12,
   },
   rules: {
+    semi: false,
+    "no-extra-semi": "error",
     "node/no-unsupported-features/es-syntax": [
       "error",
       { ignores: ["modules"] },
