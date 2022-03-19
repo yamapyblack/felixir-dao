@@ -20,7 +20,22 @@ const config: HardhatUserConfig = {
       url: `https://rinkeby.infura.io/v3/${process.env.INFURA_KEY}`,
       chainId: 3,
       gasPrice: 1000000001,
+      // accounts: accounts(),
+    },
+    shibuya: {
+      url: 'https://rpc.shibuya.astar.network:8545',
+      chainId: 81,
       accounts: accounts(),
+    },
+    shiden: {
+      url: 'https://shiden.api.onfinality.io/public',
+      chainId: 336,
+      // accounts: accounts(),
+    },
+    astar: {
+      url: 'https://rpc.astar.network:8545',
+      chainId: 592,
+      // accounts: accounts(),
     },
   },
   solidity: {
