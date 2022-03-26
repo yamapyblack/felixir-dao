@@ -14,14 +14,24 @@ abstract contract ERC721Junction is IERC721Junction, ERC721 {
         return junctions[parentTokenId];
     }
 
-    function junction(uint parentTokenId, IERC721Junction.ChildToken memory childToken, address junctioner) override external {
+    function bulkJunction(uint[] calldata parentTokenId, ChildToken[] calldata childToken) override external{
+        require(parentTokenId.length == childToken.length, "ERC721Junction: different length");
+        for(uint8 i = 0; i < parentTokenId.length; i++){
+            junction(parentTokenId[i], childToken[i]);
+        }
+    }
+
+    function junction(uint parentTokenId, IERC721Junction.ChildToken memory childToken) override public {
+        require(msg.sender == ownerOf(parentTokenId), "ERC721Junction: junction by only parent tokens owner");
+        require(msg.sender == IERC721(childToken.addr).ownerOf(childToken.id), "ERC721Junction: junction by only child tokens owner");
+
         require(
             IERC721(childToken.addr).isApprovedForAll(msg.sender, address(this)),
             "ERC721Junction: not approved"
         );
 
         IERC721(childToken.addr).transferFrom(
-            junctioner,
+            msg.sender,
             address(this),
             childToken.id
         );
@@ -29,7 +39,7 @@ abstract contract ERC721Junction is IERC721Junction, ERC721 {
         junctions[parentTokenId].push(childToken);
 
         emit Junction(
-            junctioner,
+            msg.sender,
             parentTokenId,
             childToken
         );

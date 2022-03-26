@@ -13,6 +13,10 @@ describe("testing", async () => {
     let contract: ERC721JunctionMock
     let c1: ERC721Mock
 
+    const pTokenId = 1
+    const cTokenId = 2
+    const cTokenId2 = 3
+
     beforeEach(async () => {
         [owner, addr1, addr2,] = await ethers.getSigners()
 
@@ -28,38 +32,42 @@ describe("testing", async () => {
     describe("unJunction", async () => {
 
         it("fail approve", async () => {
-            const pTokenId = 1
-            const cTokenId = 2
-
             await contract.mint(owner.address, pTokenId)
             await c1.mint(owner.address, cTokenId)
 
-            await expect(contract.junction(pTokenId, {addr: c1.address,id: cTokenId}, owner.address)).revertedWith("ERC721Junction: not approved")
+            await expect(contract.junction(pTokenId, {addr: c1.address,id: cTokenId})).revertedWith("ERC721Junction: not approved")
         })
 
-        it("fail not owner", async () => {
-            const pTokenId = 1
-            const cTokenId = 2
+        it("fail junction by not owner(parent)", async () => {
+            await contract.mint(addr1.address, pTokenId)
+            await c1.mint(owner.address, cTokenId)
 
+            await expect(contract.junction(pTokenId, {addr: c1.address,id: cTokenId})).revertedWith("ERC721Junction: junction by only parent tokens owner")
+        })
+
+        it("fail junction by not owner(child)", async () => {
+            await contract.mint(owner.address, pTokenId)
+            await c1.mint(addr1.address, cTokenId)
+
+            await expect(contract.junction(pTokenId, {addr: c1.address,id: cTokenId})).revertedWith("ERC721Junction: junction by only child tokens owner")
+        })
+
+        it("fail unjunction by not owner", async () => {
             await contract.mint(owner.address, pTokenId)
             await c1.mint(owner.address, cTokenId)
 
             await c1.setApprovalForAll(contract.address, true)
-            await contract.junction(pTokenId, {addr: c1.address,id: cTokenId}, owner.address)
+            await contract.junction(pTokenId, {addr: c1.address,id: cTokenId})
 
             await expect(contract.connect(addr1).unJunction(pTokenId)).revertedWith("ERC721Junction: unJunction by only parent tokens owner")
         })
 
-
         it("success", async () => {
-            const pTokenId = 1
-            const cTokenId = 2
-
             await contract.mint(owner.address, pTokenId)
             await c1.mint(owner.address, cTokenId)
 
             await c1.setApprovalForAll(contract.address, true)
-            await contract.junction(pTokenId, {addr: c1.address,id: cTokenId}, owner.address)
+            await contract.junction(pTokenId, {addr: c1.address,id: cTokenId})
 
             await contract["safeTransferFrom(address,address,uint256)"](owner.address, addr1.address, pTokenId)
             expect(addr1.address).equals(await contract.ownerOf(pTokenId))
@@ -69,17 +77,12 @@ describe("testing", async () => {
         })
 
         it("success multiple", async () => {
-            const pTokenId = 1
-            const cTokenId = 2
-            const cTokenId2 = 3
-
             await contract.mint(owner.address, pTokenId)
             await c1.mint(owner.address, cTokenId)
             await c1.mint(owner.address, cTokenId2)
 
             await c1.setApprovalForAll(contract.address, true)
-            await contract.junction(pTokenId, {addr: c1.address,id: cTokenId}, owner.address)
-            await contract.junction(pTokenId, {addr: c1.address,id: cTokenId2}, owner.address)
+            await contract.bulkJunction([pTokenId,pTokenId], [{addr: c1.address,id: cTokenId},{addr: c1.address,id: cTokenId2}])
 
             await contract["safeTransferFrom(address,address,uint256)"](owner.address, addr1.address, pTokenId)
             expect(addr1.address).equals(await contract.ownerOf(pTokenId))

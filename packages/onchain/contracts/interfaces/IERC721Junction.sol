@@ -15,6 +15,7 @@ interface IERC721Junction{
     );
 
     function getJunctions(uint parentTokenId) external view returns(ChildToken[] memory);
-    function junction(uint parentTokenId, ChildToken memory childToken, address junctioner) external;
+    function bulkJunction(uint[] calldata parentTokenId, ChildToken[] calldata childToken) external;
+    function junction(uint parentTokenId, ChildToken memory childToken) external;
     function unJunction(uint parentTokenId) external;
 }
