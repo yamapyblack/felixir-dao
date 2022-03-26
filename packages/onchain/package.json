@@ -5,8 +5,11 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
+    "@nouns/sdk": "^0.1.5",
     "@openzeppelin/contracts": "^4.5.0",
-    "hardhat": "^2.9.1"
+    "@types/pngjs": "^6.0.1",
+    "hardhat": "^2.9.1",
+    "pngjs": "^6.0.0"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.5",
