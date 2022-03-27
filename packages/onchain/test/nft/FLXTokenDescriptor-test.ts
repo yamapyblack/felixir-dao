@@ -3,6 +3,7 @@ import { ethers } from "hardhat";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
 import { encode } from "../../scripts/svg/encoder";
 import { promises as fs } from "fs";
+import { expect, use } from 'chai'
 import path from "path";
 
 // test contracts and parameters
@@ -35,12 +36,56 @@ describe("testing", async () => {
     await c.deployed();
   });
 
-  describe("nard", async () => {
-    it("success weapon", async () => {
-      // const palettes = ["", "ffffff", "181b1d", "550e11", "0e6775"];
-      // const seed =
-      //   "0x0001131f100301030103010301030103010301020201010301010102030301010101040101010101040101030103010301030103010301030103010301030103010301030103010301030103010301";
+  describe("test", async () => {
+    it("fail setSeed", async () => {
+      await expect(c.connect(addr1).setSeed(0, "")).reverted
+    })
 
+    it("success setSeed", async () => {
+      const seed = '0x0001131f100301030103010301030103010301020201010301010102030301010101040101010101040101030103010301030103010301030103010301030103010301030103010301030103010301'
+      await c.setSeed(0, seed)
+      expect(await c.seeds(0)).equals(seed)
+    })
+
+    it("fail addBulkColorsToPalette", async () => {      
+      await expect(c.connect(addr1).addBulkColorsToPalette(0, [''])).reverted
+    })
+
+    it("fail addBulkColorsToPalette 256colors", async () => {
+      let palettes = []
+      for(let i = 0; i < 257; i++){
+        palettes.push('ffffff')
+      }
+      await expect(c.addBulkColorsToPalette(0, palettes)).revertedWith('Palettes can only hold 256 colors')
+    })
+
+    it("success addBulkColorsToPalette", async () => {      
+      const palettes = ["ffffff", "181b1d"]
+      await c.addBulkColorsToPalette(0, palettes)
+      expect(await c.palettes(0,0)).equals(palettes[0])
+      expect(await c.palettes(0,1)).equals(palettes[1])
+    })
+
+    it("fail addColorToPalette", async () => {      
+      await expect(c.connect(addr1).addColorToPalette(0, '')).reverted
+    })
+
+    it("fail addColorToPalette 256colors", async () => {
+      let palettes = []
+      for(let i = 0; i < 256; i++){
+        palettes.push('ffffff')
+      }
+      await c.addBulkColorsToPalette(0, palettes)
+      await expect(c.addColorToPalette(0, 'f0f0f0')).revertedWith('Palettes can only hold 256 colors')
+    })
+
+    it("success addColorToPalette", async () => {      
+      const palette = "ffffff"
+      await c.addColorToPalette(0, palette)
+      expect(await c.palettes(0,0)).equals(palette)
+    })
+
+    it("success generateImage", async () => {
       const encodeJson = await encode(INPUT_SVG_FILE);
       const palettes = encodeJson.palette;
       palettes.shift(); // Nounsのだと先頭が空になるため、先頭削除
@@ -54,14 +99,6 @@ describe("testing", async () => {
       const svg2 = ethers.utils.toUtf8String(ethers.utils.base64.decode(svg));
       console.log(svg2)
       await fs.writeFile(OUT_SVG_FILE, svg2);
-
-      // const svg1 = svg.split(",")[1];
-      // const svg2 = ethers.utils.toUtf8String(ethers.utils.base64.decode(svg1));
-      // const svg3 = svg2.split(",")[3];
-      // const svg4 = ethers.utils.toUtf8String(ethers.utils.base64.decode(svg3));
-      // console.log(svg4);
-
-      // await fs.writeFile(OUT_SVG_FILE, svg4);
     });
   });
 });

@@ -6,24 +6,24 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-wit
 
 //
 import { ERC721PrimitiveMock } from "../typechain/ERC721PrimitiveMock"
-import { FLXSvgBase } from "../typechain/FLXSvgBase"
+import { NFTDescriptor } from "../typechain/NFTDescriptor"
 import { FLXTokenDescriptor } from "../typechain/FLXTokenDescriptor"
   
 describe("testing", async () => {
     let owner :SignerWithAddress, addr1 :SignerWithAddress, addr2 :SignerWithAddress
     let contract: ERC721PrimitiveMock
-    let c1: FLXSvgBase
+    let c1: NFTDescriptor
     let c2: FLXTokenDescriptor
 
     beforeEach(async () => {
         [owner, addr1, addr2,] = await ethers.getSigners()
 
-        const FLXSvgBase = await ethers.getContractFactory("FLXSvgBase");
-        c1 = (await FLXSvgBase.deploy()) as FLXSvgBase
+        const NFTDescriptor = await ethers.getContractFactory("NFTDescriptor");
+        c1 = (await NFTDescriptor.deploy()) as NFTDescriptor
         await c1.deployed()
 
         const FLXTokenDescriptor = await ethers.getContractFactory("FLXTokenDescriptor", {
-            libraries: {FLXSvgBase: c1.address}
+            libraries: {NFTDescriptor: c1.address}
         })
         c2 = (await FLXTokenDescriptor.deploy()) as FLXTokenDescriptor
         await c2.deployed()

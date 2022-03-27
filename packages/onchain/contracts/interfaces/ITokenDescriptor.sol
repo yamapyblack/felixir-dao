@@ -9,4 +9,25 @@ interface ITokenDescriptor {
         external
         view
         returns (string memory);
+
+    function generateName(uint256 tokenId)
+        external
+        view
+        returns (string memory);
+
+    function generateDescription(uint256 tokenId)
+        external
+        view
+        returns (string memory);
+
+    function generateAttributes(uint256 tokenId)
+        external
+        pure
+        returns (string memory);
+
+    function generateImage(uint256 tokenId)
+        external
+        view
+        returns (string memory);
+
 }
