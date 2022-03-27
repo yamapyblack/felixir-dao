@@ -1,14 +1,13 @@
 // SPDX-License-Identifier: CC0
 
-pragma solidity ^0.8.9;
+pragma solidity ^0.8.0;
 
-import "../interfaces/ITokenDescriptor.sol";
+import "../interfaces/IERC721TokenDescriptor.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import {Base64} from "@openzeppelin/contracts/utils/Base64.sol";
-import "../interfaces/ITokenDescriptor.sol";
 
-abstract contract ERC721TokenDescriptor is ITokenDescriptor, Ownable {
+abstract contract ERC721TokenDescriptor is IERC721TokenDescriptor, Ownable {
     using Strings for uint256;
 
     string public name;
@@ -58,9 +57,10 @@ abstract contract ERC721TokenDescriptor is ITokenDescriptor, Ownable {
         returns (string memory)
     {}
 
-    function tokenURI(IERC721 token, uint256 tokenId)
+    function tokenURI(address token, uint256 tokenId)
         external
         view
+        virtual
         override
         returns (string memory)
     {

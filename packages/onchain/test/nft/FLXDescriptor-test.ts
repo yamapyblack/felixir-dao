@@ -7,7 +7,7 @@ import { expect, use } from 'chai'
 import path from "path";
 
 // test contracts and parameters
-import { FLXTokenDescriptor } from "../../typechain/FLXTokenDescriptor";
+import { FLXDescriptor } from "../../typechain/FLXDescriptor";
 // import { MultiPartRLEToSVG } from "../typechain/MultiPartRLEToSVG";
 
 const OUT_SVG_FILE = "images/encoder.svg";
@@ -17,7 +17,7 @@ const INPUT_SVG_FILE2 = "images/image6.png"
 describe("testing", async () => {
   let owner :SignerWithAddress, addr1 :SignerWithAddress, addr2 :SignerWithAddress
 
-  let c: FLXTokenDescriptor;
+  let c: FLXDescriptor;
   // let c0: MultiPartRLEToSVG;
   let c0;
 
@@ -29,10 +29,10 @@ describe("testing", async () => {
     c0 = await MultiPartRLEToSVG.deploy();
     await c0.deployed();
 
-    const FLXTokenDescriptor = await ethers.getContractFactory("FLXTokenDescriptor", {
+    const FLXDescriptor = await ethers.getContractFactory("FLXDescriptor", {
       // libraries: { MultiPartRLEToSVG: c0.address },
     });
-    c = (await FLXTokenDescriptor.deploy()) as FLXTokenDescriptor;
+    c = (await FLXDescriptor.deploy()) as FLXDescriptor;
     await c.deployed();
   });
 
@@ -90,15 +90,15 @@ describe("testing", async () => {
       const palettes = encodeJson.palette;
       palettes.shift(); // Nounsのだと先頭が空になるため、先頭削除
       const seed = encodeJson.images.root[0].data;
-      console.log(seed)
+      console.log(palettes)
 
       await c.addBulkColorsToPalette(0, palettes);
       await c.setSeed(0, seed);
 
-      const svg = await c.generateImage(0);
-      const svg2 = ethers.utils.toUtf8String(ethers.utils.base64.decode(svg));
-      console.log(svg2)
-      await fs.writeFile(OUT_SVG_FILE, svg2);
+      // const svg = await c.generateImage(0);
+      // const svg2 = ethers.utils.toUtf8String(ethers.utils.base64.decode(svg));
+      // console.log(svg2)
+      // await fs.writeFile(OUT_SVG_FILE, svg2);
     });
   });
 });
