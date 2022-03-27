@@ -2,7 +2,7 @@
 
 pragma solidity 0.8.13;
 
-import "./ERC721Primitive.sol";
+import "../lib/ERC721Primitive.sol";
 
 contract FLXNFT is ERC721Primitive {
     constructor()
