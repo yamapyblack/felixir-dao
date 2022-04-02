@@ -7,7 +7,7 @@ import { expect, use } from 'chai'
 import path from "path";
 
 // test contracts and parameters
-import { FLXDescriptor } from "../../typechain/FLXDescriptor";
+import { FLXDescriptorPrimitive } from "../../typechain/FLXDescriptorPrimitive";
 // import { NFTDescriptor } from "../typechain/NFTDescriptor";
 
 const OUT_SVG_FILE = "images/encoder.svg";
@@ -17,7 +17,7 @@ const INPUT_SVG_FILE2 = "images/image6.png"
 describe("testing", async () => {
   let owner :SignerWithAddress, addr1 :SignerWithAddress, addr2 :SignerWithAddress
 
-  let c: FLXDescriptor;
+  let c: FLXDescriptorPrimitive;
   let c0;
 
   beforeEach(async () => {
@@ -27,30 +27,21 @@ describe("testing", async () => {
     c0 = await NFTDescriptor.deploy();
     await c0.deployed();
 
-    const FLXDescriptor = await ethers.getContractFactory("FLXDescriptor", {
+    const FLXDescriptorPrimitive = await ethers.getContractFactory("FLXDescriptorPrimitive", {
       libraries: { NFTDescriptor: c0.address },
     });
-    c = (await FLXDescriptor.deploy()) as FLXDescriptor;
+    c = (await FLXDescriptorPrimitive.deploy()) as FLXDescriptorPrimitive;
     await c.deployed();
   });
 
   describe("test", async () => {
-    it("fail setName", async () => {
-      await expect(c.connect(addr1).setName("hoge")).reverted
+    it("fail setToken", async () => {
+      await expect(c.connect(addr1).setToken(addr1.address)).reverted
     });
 
-    it("success setName", async () => {
-      await c.setName("hoge")
-      expect(await c.generateName(1)).equals("hoge1")
-    });
-
-    it("fail setDescription", async () => {
-      await expect(c.connect(addr1).setDescription("hoge")).reverted
-    });
-
-    it("success setDescription", async () => {
-      await c.setDescription("hoge")
-      expect(await c.generateDescription(1)).equals("hoge")
+    it("success setToken", async () => {
+      await c.setToken(addr1.address)
+      expect(await c.token()).equals(addr1.address)
     });
 
     it("success generateImage", async () => {

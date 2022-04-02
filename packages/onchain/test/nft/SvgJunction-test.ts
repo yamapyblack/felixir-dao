@@ -6,8 +6,8 @@ import { promises as fs } from "fs";
 import { expect, use } from 'chai'
 
 // test contracts and parameters
+import { FLXDescriptorPrimitive } from "../../typechain/FLXDescriptorPrimitive";
 import { FLXDescriptor } from "../../typechain/FLXDescriptor";
-import { FLXDescriptorExtension } from "../../typechain/FLXDescriptorExtension";
 import { FLXPrimitive } from "../../typechain/FLXPrimitive";
 import { FLXExtension } from "../../typechain/FLXExtension";
 
@@ -18,20 +18,29 @@ const INPUT_SVG_FILE2 = "images/image5.png"
 describe("testing", async () => {
   let owner :SignerWithAddress, addr1 :SignerWithAddress, addr2 :SignerWithAddress
 
-  let c: FLXDescriptorExtension;
-  let c1: FLXDescriptor;
+  let c0;
+  let c: FLXDescriptor;
+  let c1: FLXDescriptorPrimitive;
   let c2: FLXExtension;
   let c3: FLXPrimitive;
 
   beforeEach(async () => {
     [owner, addr1, addr2,] = await ethers.getSigners()
 
-    const FLXDescriptorExtension = await ethers.getContractFactory("FLXDescriptorExtension", {});
-    c = (await FLXDescriptorExtension.deploy()) as FLXDescriptorExtension;
+    const NFTDescriptor = await ethers.getContractFactory("NFTDescriptor");
+    c0 = await NFTDescriptor.deploy();
+    await c0.deployed();
+
+    const FLXDescriptor = await ethers.getContractFactory("FLXDescriptor", {
+      libraries: { NFTDescriptor: c0.address },
+    });
+    c = (await FLXDescriptor.deploy()) as FLXDescriptor;
     await c.deployed();
 
-    const FLXDescriptor = await ethers.getContractFactory("FLXDescriptor", {});
-    c1 = (await FLXDescriptor.deploy()) as FLXDescriptor;
+    const FLXDescriptorPrimitive = await ethers.getContractFactory("FLXDescriptorPrimitive", {
+      libraries: { NFTDescriptor: c0.address },
+    });
+    c1 = (await FLXDescriptorPrimitive.deploy()) as FLXDescriptorPrimitive;
     await c.deployed();
 
     const FLXExtension = await ethers.getContractFactory("FLXExtension", {});
@@ -74,15 +83,20 @@ describe("testing", async () => {
       //junction
       await c2.setApprovalForAll(c3.address, true)
       await c3.junction(1,{addr: c2.address, id: 1})
+
+      //set token address to descriptor
+      await c1.setToken(c3.address)
       
       //tokenURI
       const svg = await c3.tokenURI(1)
       const svg1 = svg.split(",")[1];
       const svg2 = ethers.utils.toUtf8String(ethers.utils.base64.decode(svg1));
+      console.log(svg2);
+
       const svg2s = svg2.split(",")
       const svg3 = svg2s[svg2s.length-1];
       const svg4 = ethers.utils.toUtf8String(ethers.utils.base64.decode(svg3));
-      console.log(svg4);
+      // console.log(svg4);
 
       await fs.writeFile(OUT_SVG_FILE, svg4);
     });

@@ -5,7 +5,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 
 interface IERC721TokenDescriptor {
-    function tokenURI(address token, uint256 tokenId)
+    function tokenURI(uint256 tokenId)
         external
         view
         returns (string memory);
@@ -22,7 +22,7 @@ interface IERC721TokenDescriptor {
 
     function generateAttributes(uint256 tokenId)
         external
-        pure
+        view
         returns (string memory);
 
     function generateImage(uint256 tokenId)

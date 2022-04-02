@@ -2,11 +2,16 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "./IERC721TokenDescriptor.sol";
 
-interface IFLXDescriptor {
-    function getSeedAndPulettesByTokenId(uint256 _tokenId)
+interface IFLXDescriptor is IERC721TokenDescriptor{
+    function getSeedAndPalettes(uint256 _tokenId)
         external
         view
         returns (bytes memory, string[] memory);
+
+    function generateSVGImage(uint256 _tokenId)
+        external
+        view
+        returns (string memory);
 }

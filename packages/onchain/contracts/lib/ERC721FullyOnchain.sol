@@ -23,7 +23,7 @@ abstract contract ERC721FullyOnchain is ERC721, Ownable, IERC721FullyOnchain {
         returns (string memory)
     {
         require(_exists(tokenId), "nonexistent token");
-        return IERC721TokenDescriptor(descriptor).tokenURI(address(this), tokenId);
+        return IERC721TokenDescriptor(descriptor).tokenURI(tokenId);
     }
 
 }

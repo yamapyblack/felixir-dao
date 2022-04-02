@@ -6,11 +6,14 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "../interfaces/IPaletteStorage.sol";
 
 abstract contract PaletteStorage is Ownable, IPaletteStorage {
-
     mapping(uint8 => bytes) public seeds;
     mapping(uint8 => string[]) public palettes;
 
-    function setSeed(uint8 _seedIdx, bytes calldata _seed) external override onlyOwner {
+    function setSeed(uint8 _seedIdx, bytes calldata _seed)
+        external
+        override
+        onlyOwner
+    {
         seeds[_seedIdx] = _seed;
     }
 
@@ -29,7 +32,7 @@ abstract contract PaletteStorage is Ownable, IPaletteStorage {
 
     function addColorToPalette(uint8 _paletteIndex, string calldata _color)
         external
-        override 
+        override
         onlyOwner
     {
         require(
@@ -44,5 +47,4 @@ abstract contract PaletteStorage is Ownable, IPaletteStorage {
     {
         palettes[_paletteIndex].push(_color);
     }
-
 }
