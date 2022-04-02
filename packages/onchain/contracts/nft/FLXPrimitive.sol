@@ -16,7 +16,7 @@ contract FLXPrimitive is ERC721FullyOnchain, ERC721Junction, ERC721Mintable {
         address from,
         address to,
         uint256 tokenId
-    ) internal virtual override(ERC721Mintable, ERC721) {
+    ) internal virtual override(ERC721Enumerable, ERC721) {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 

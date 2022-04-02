@@ -16,7 +16,7 @@ contract FLXExtension is ERC721FullyOnchain, ERC721Mintable {
         address from,
         address to,
         uint256 tokenId
-    ) internal virtual override(ERC721Mintable, ERC721) {
+    ) internal virtual override(ERC721, ERC721Enumerable) {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
