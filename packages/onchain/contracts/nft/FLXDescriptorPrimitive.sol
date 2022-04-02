@@ -47,7 +47,7 @@ contract FLXDescriptorPrimitive is FLXDescriptor {
         }
 
         string memory tmp;
-        IERC721Junction.ChildToken[] memory children = token.getJunctions(
+        IERC721Junction.ChildToken[] memory children = token.getChildren(
             tokenId
         );
         for (uint8 i = 0; i < children.length; i++) {
@@ -77,7 +77,7 @@ contract FLXDescriptorPrimitive is FLXDescriptor {
 
         // TODO yamaura
         string memory svg;
-        IERC721Junction.ChildToken[] memory children = token.getJunctions(
+        IERC721Junction.ChildToken[] memory children = token.getChildren(
             tokenId
         );
         for (uint8 i = 0; i < children.length; i++) {
