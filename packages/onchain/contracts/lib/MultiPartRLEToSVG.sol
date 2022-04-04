@@ -2,7 +2,7 @@
 
 /// @title A library used to convert multi-part RLE compressed images to SVG
 
-pragma solidity ^0.8.6;
+pragma solidity ^0.8.0;
 
 import "hardhat/console.sol";
 

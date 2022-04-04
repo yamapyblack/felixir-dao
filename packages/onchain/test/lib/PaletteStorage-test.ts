@@ -7,33 +7,20 @@ import { expect, use } from 'chai'
 import path from "path";
 
 // test contracts and parameters
-import { FLXTokenDescriptor } from "../../typechain/FLXTokenDescriptor";
-// import { MultiPartRLEToSVG } from "../typechain/MultiPartRLEToSVG";
-
-const OUT_SVG_FILE = "images/encoder.svg";
-const INPUT_SVG_FILE = "images/image5.png"
-const INPUT_SVG_FILE2 = "images/image6.png"
+import { PaletteStorageMock } from "../../typechain/PaletteStorageMock";
 
 describe("testing", async () => {
   let owner :SignerWithAddress, addr1 :SignerWithAddress, addr2 :SignerWithAddress
 
-  let c: FLXTokenDescriptor;
-  // let c0: MultiPartRLEToSVG;
-  let c0;
+  let c: PaletteStorageMock;
 
   beforeEach(async () => {
     [owner, addr1, addr2,] = await ethers.getSigners()
 
-    const MultiPartRLEToSVG = await ethers.getContractFactory("MultiPartRLEToSVG");
-    // c0 = (await MultiPartRLEToSVG.deploy()) as MultiPartRLEToSVG;
-    c0 = await MultiPartRLEToSVG.deploy();
-    await c0.deployed();
-
-    const FLXTokenDescriptor = await ethers.getContractFactory("FLXTokenDescriptor", {
-      // libraries: { MultiPartRLEToSVG: c0.address },
-    });
-    c = (await FLXTokenDescriptor.deploy()) as FLXTokenDescriptor;
+    const PaletteStorageMock = await ethers.getContractFactory("PaletteStorageMock");
+    c = await PaletteStorageMock.deploy();
     await c.deployed();
+
   });
 
   describe("test", async () => {
@@ -85,20 +72,5 @@ describe("testing", async () => {
       expect(await c.palettes(0,0)).equals(palette)
     })
 
-    it("success generateImage", async () => {
-      const encodeJson = await encode(INPUT_SVG_FILE);
-      const palettes = encodeJson.palette;
-      palettes.shift(); // Nounsのだと先頭が空になるため、先頭削除
-      const seed = encodeJson.images.root[0].data;
-      console.log(seed)
-
-      await c.addBulkColorsToPalette(0, palettes);
-      await c.setSeed(0, seed);
-
-      const svg = await c.generateImage(0);
-      const svg2 = ethers.utils.toUtf8String(ethers.utils.base64.decode(svg));
-      console.log(svg2)
-      await fs.writeFile(OUT_SVG_FILE, svg2);
-    });
   });
 });
