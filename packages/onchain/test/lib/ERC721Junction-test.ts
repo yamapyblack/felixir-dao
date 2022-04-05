@@ -8,7 +8,7 @@ import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-wit
 import { ERC721JunctionMock } from "../../typechain/ERC721JunctionMock"
 import { ERC721Mock } from "../../typechain/ERC721Mock"
 
-describe("testing", async () => {
+describe("ERC721Junction-test", async () => {
     let owner :SignerWithAddress, addr1 :SignerWithAddress, addr2 :SignerWithAddress
     let contract: ERC721JunctionMock
     let c1: ERC721Mock

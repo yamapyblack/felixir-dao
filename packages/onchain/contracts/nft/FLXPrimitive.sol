@@ -4,11 +4,13 @@ pragma solidity 0.8.13;
 
 import "../lib/ERC721FullyOnchain.sol";
 import "../lib/ERC721Junction.sol";
+import "../lib/ERC721Votes.sol";
 import "../lib/ERC721Mintable.sol";
 
-contract FLXPrimitive is ERC721FullyOnchain, ERC721Junction, ERC721Mintable {
+contract FLXPrimitive is ERC721FullyOnchain, ERC721Junction, ERC721Votes, ERC721Mintable {
     constructor()
-        ERC721Mintable("FLXNFT", "FLX")
+        ERC721Mintable("Felixir", "FLX")
+        EIP712("Felixir","1")
     {}
 
     //
@@ -17,6 +19,14 @@ contract FLXPrimitive is ERC721FullyOnchain, ERC721Junction, ERC721Mintable {
         address to,
         uint256 tokenId
     ) internal virtual override(ERC721Enumerable, ERC721) {
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+
+    function _afterTokenTransfer(
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal virtual override(ERC721Votes, ERC721) {
         super._beforeTokenTransfer(from, to, tokenId);
     }
 

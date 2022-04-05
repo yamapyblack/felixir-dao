@@ -8,6 +8,9 @@
     "@nouns/sdk": "^0.1.5",
     "@openzeppelin/contracts": "^4.5.0",
     "@types/pngjs": "^6.0.1",
+    "eth-sig-util": "^3.0.1",
+    "ethereumjs-util": "^7.1.4",
+    "ethereumjs-wallet": "1.0.1",
     "hardhat": "^2.9.1",
     "pngjs": "^6.0.0"
   },

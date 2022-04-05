@@ -9,7 +9,7 @@ import path from "path";
 // test contracts and parameters
 import { PaletteStorageMock } from "../../typechain/PaletteStorageMock";
 
-describe("testing", async () => {
+describe("PaletteStorage-test", async () => {
   let owner :SignerWithAddress, addr1 :SignerWithAddress, addr2 :SignerWithAddress
 
   let c: PaletteStorageMock;
