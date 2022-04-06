@@ -3,12 +3,11 @@
 pragma solidity 0.8.13;
 
 import "../lib/ERC721FullyOnchain.sol";
-import "../lib/ERC721Junction.sol";
 import "../lib/ERC721Mintable.sol";
 
 contract FLXExtension is ERC721FullyOnchain, ERC721Mintable {
     constructor()
-        ERC721Mintable("FLXNFT", "FLX")
+        ERC721Mintable("FLXExtension", "FLXEX")
     {}
 
     //

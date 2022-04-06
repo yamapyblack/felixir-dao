@@ -6,17 +6,17 @@ import { promises as fs } from "fs";
 import path from "path";
 
 // test contracts and parameters
-import { FLXTokenDescriptor } from "../../typechain/FLXTokenDescriptor";
+import { FLXDescriptor } from "../../typechain/FLXDescriptor";
 // import { MultiPartRLEToSVG } from "../typechain/MultiPartRLEToSVG";
 
 const OUT_SVG_FILE = "images/encoder.svg";
 const INPUT_SVG_FILE = "images/image5.png"
 const INPUT_SVG_FILE2 = "images/image6.png"
 
-describe("testing", async () => {
+describe("encoder-test", async () => {
   let owner :SignerWithAddress, addr1 :SignerWithAddress, addr2 :SignerWithAddress
 
-  let c: FLXTokenDescriptor;
+  let c: FLXDescriptor;
   // let c0: MultiPartRLEToSVG;
   let c0;
 
@@ -28,14 +28,14 @@ describe("testing", async () => {
     c0 = await MultiPartRLEToSVG.deploy();
     await c0.deployed();
 
-    const FLXTokenDescriptor = await ethers.getContractFactory("FLXTokenDescriptor", {
+    const FLXDescriptor = await ethers.getContractFactory("FLXDescriptor", {
       // libraries: { MultiPartRLEToSVG: c0.address },
     });
-    c = (await FLXTokenDescriptor.deploy()) as FLXTokenDescriptor;
+    c = (await FLXDescriptor.deploy()) as FLXDescriptor;
     await c.deployed();
   });
 
-  describe("nard", async () => {
+  describe("test", async () => {
     it("success weapon", async () => {
       // const palettes = ["", "ffffff", "181b1d", "550e11", "0e6775"];
       // const seed =

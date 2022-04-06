@@ -15,7 +15,7 @@ const OUT_SVG_FILE = "images/encoder.svg";
 const INPUT_SVG_FILE = "images/image_soard2.png"
 const INPUT_SVG_FILE2 = "images/image5.png"
 
-describe("testing", async () => {
+describe("SvgJunction-test", async () => {
   let owner :SignerWithAddress, addr1 :SignerWithAddress, addr2 :SignerWithAddress
 
   let c0;
@@ -82,7 +82,7 @@ describe("testing", async () => {
 
       //junction
       await c2.setApprovalForAll(c3.address, true)
-      await c3.junction(1,{addr: c2.address, id: 1})
+      await c3.junction(1,[{addr: c2.address, id: 1}])
 
       //set token address to descriptor
       await c1.setToken(c3.address)

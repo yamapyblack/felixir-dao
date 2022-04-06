@@ -14,7 +14,7 @@ const OUT_SVG_FILE = "images/encoder.svg";
 const INPUT_SVG_FILE = "images/image5.png"
 const INPUT_SVG_FILE2 = "images/image6.png"
 
-describe("testing", async () => {
+describe("FLXDescriptor-test", async () => {
   let owner :SignerWithAddress, addr1 :SignerWithAddress, addr2 :SignerWithAddress
 
   let c: FLXDescriptor;
