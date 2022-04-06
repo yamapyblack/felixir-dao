@@ -1,15 +1,13 @@
 import "@nomiclabs/hardhat-waffle";
 import { ethers } from "hardhat";
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
-import { promises as fs } from "fs";
 import { expect, use } from 'chai'
-import path from "path";
 
 // test contracts and parameters
 import { FelixirExecutorMock } from "../../typechain/FelixirExecutorMock";
 import { utils } from "ethers";
 import { BigNumberish, BytesLike } from "ethers";
-import { encodeParameters } from "../helper/helper";
+import { encodeParameters, NilAddress } from "../helper/helper";
 import { BigNumber } from "ethers";
 
 type Param = {
@@ -31,12 +29,20 @@ describe("FelixirExecutor-test", async () => {
     [owner, addr1, addr2,] = await ethers.getSigners()
 
     const FelixirExecutorMock = await ethers.getContractFactory("FelixirExecutorMock");
-    c = await FelixirExecutorMock.deploy(owner.address);
+    c = await FelixirExecutorMock.deploy();
     await c.deployed();
+
+    await c.setLogic(owner.address)
   });
 
   describe("test", async () => {
     it("fail onlyAdmin", async () => {
+      await expect(c.connect(addr1).setLogic(addr1.address)).revertedWith("FelixirExecutor::queueTransaction: Call must come from admin.")
+      await c.setAdmin(NilAddress)
+      await expect(c.setLogic(addr1.address)).revertedWith("FelixirExecutor::queueTransaction: Call must come from admin.")
+    })
+
+    it("fail onlyLogic", async () => {
       let param: Param = {
         target: addr1.address,
         value: utils.parseEther("1"),
@@ -44,9 +50,9 @@ describe("FelixirExecutor-test", async () => {
         data: encodeParameters(['address'],[addr1.address]),
         eta: Math.floor(Date.now() / 1000) + days8,
       }
-      await expect(c.connect(addr1).queueTransaction(param.target, param.value, param.signature, param.data, param.eta)).revertedWith("FelixirExecutor::queueTransaction: Call must come from admin.")
-      await expect(c.connect(addr1).cancelTransaction(param.target, param.value, param.signature, param.data, param.eta)).revertedWith("FelixirExecutor::queueTransaction: Call must come from admin.")
-      await expect(c.connect(addr1).executeTransaction(param.target, param.value, param.signature, param.data, param.eta)).revertedWith("FelixirExecutor::queueTransaction: Call must come from admin.")
+      await expect(c.connect(addr1).queueTransaction(param.target, param.value, param.signature, param.data, param.eta)).revertedWith("FelixirExecutor::queueTransaction: Call must come from logic contract.")
+      await expect(c.connect(addr1).cancelTransaction(param.target, param.value, param.signature, param.data, param.eta)).revertedWith("FelixirExecutor::queueTransaction: Call must come from logic contract.")
+      await expect(c.connect(addr1).executeTransaction(param.target, param.value, param.signature, param.data, param.eta)).revertedWith("FelixirExecutor::queueTransaction: Call must come from logic contract.")
     })
 
     it("fail queueTransaction DELAY", async () => {

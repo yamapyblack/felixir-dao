@@ -6,14 +6,13 @@ import { encode } from "../../scripts/svg/encoder";
 import { promises as fs } from "fs";
 import { expect, use } from 'chai'
 import path from "path";
-import {getBlockNumber} from "../helper/Mine"
+import {getBlockNumber, NilAddress} from "../helper/helper"
 
 // test contracts and parameters
 import { VotesMock } from "../../typechain/VotesMock";
 
 const ethSigUtil = require('eth-sig-util');
 import { fromRpcSig } from 'ethereumjs-util'
-const NilAddress = "0x0000000000000000000000000000000000000000";
 const Wallet = require('ethereumjs-wallet').default;
 
 const name = "VotesMock";

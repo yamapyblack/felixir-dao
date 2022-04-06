@@ -3,10 +3,6 @@
 pragma solidity 0.8.13;
 
 contract FelixirExecutor {
-    // event NewAdmin(address indexed newAdmin);
-    // event NewPendingAdmin(address indexed newPendingAdmin);
-    // event NewDelay(uint256 indexed newDelay);
-
     event CancelTransaction(
         bytes32 indexed txHash,
         address indexed target,
@@ -33,55 +29,34 @@ contract FelixirExecutor {
     );
 
     uint256 public constant GRACE_PERIOD = 14 days;
-    // uint256 public constant MINIMUM_DELAY = 2 days;
-    // uint256 public constant MAXIMUM_DELAY = 30 days;
     uint256 public constant DELAY = 7 days;
 
     address public admin;
-    // address public pendingAdmin;
-    // uint256 public delay;
+    address public logic;
 
     mapping(bytes32 => bool) public queuedTransactions;
+
+    modifier onlyLogic() {
+        require(msg.sender == logic, 'FelixirExecutor::queueTransaction: Call must come from logic contract.');
+        _;
+    }
 
     modifier onlyAdmin() {
         require(msg.sender == admin, 'FelixirExecutor::queueTransaction: Call must come from admin.');
         _;
     }
 
-    constructor(address admin_) {
-        // require(delay_ >= MINIMUM_DELAY, 'FelixirExecutor::constructor: Delay must exceed minimum delay.');
-        // require(delay_ <= MAXIMUM_DELAY, 'FelixirExecutor::setDelay: Delay must not exceed maximum delay.');
-
-        admin = admin_;
-        // delay = delay_;
+    constructor() {
+        admin = msg.sender;
     }
 
-    // function setDelay(uint256 delay_) public {
-    //     require(msg.sender == address(this), 'FelixirExecutor::setDelay: Call must come from FelixirExecutor.');
-    //     require(delay_ >= MINIMUM_DELAY, 'FelixirExecutor::setDelay: Delay must exceed minimum delay.');
-    //     require(delay_ <= MAXIMUM_DELAY, 'FelixirExecutor::setDelay: Delay must not exceed maximum delay.');
-    //     delay = delay_;
+    function setLogic(address _logic) external onlyAdmin {
+        logic = _logic;
+    }
 
-    //     emit NewDelay(delay);
-    // }
-
-    // function acceptAdmin() public {
-    //     require(msg.sender == pendingAdmin, 'FelixirExecutor::acceptAdmin: Call must come from pendingAdmin.');
-    //     admin = msg.sender;
-    //     pendingAdmin = address(0);
-
-    //     emit NewAdmin(admin);
-    // }
-
-    // function setPendingAdmin(address pendingAdmin_) public {
-    //     require(
-    //         msg.sender == address(this),
-    //         'FelixirExecutor::setPendingAdmin: Call must come from FelixirExecutor.'
-    //     );
-    //     pendingAdmin = pendingAdmin_;
-
-    //     emit NewPendingAdmin(pendingAdmin);
-    // }
+    function setAdmin(address _admin) external onlyAdmin {
+        admin = _admin;
+    }
 
     function queueTransaction(
         address target,
@@ -89,7 +64,7 @@ contract FelixirExecutor {
         string memory signature,
         bytes memory data,
         uint256 eta
-    ) public onlyAdmin returns (bytes32) {
+    ) public onlyLogic returns (bytes32) {
         require(
             eta >= getBlockTimestamp() + DELAY,
             'FelixirExecutor::queueTransaction: Estimated execution block must satisfy delay.'
@@ -108,7 +83,7 @@ contract FelixirExecutor {
         string memory signature,
         bytes memory data,
         uint256 eta
-    ) public onlyAdmin {
+    ) public onlyLogic {
         bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
         queuedTransactions[txHash] = false;
 
@@ -121,7 +96,7 @@ contract FelixirExecutor {
         string memory signature,
         bytes memory data,
         uint256 eta
-    ) public onlyAdmin returns (bytes memory) {
+    ) public onlyLogic returns (bytes memory) {
         bytes32 txHash = keccak256(abi.encode(target, value, signature, data, eta));
         require(queuedTransactions[txHash], "FelixirExecutor::executeTransaction: Transaction hasn't been queued.");
 
