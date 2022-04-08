@@ -2,15 +2,14 @@
 
 pragma solidity ^0.8.0;
 
-import "../lib/ERC721Mintable.sol";
-import "../interfaces/ITokenDescriptor.sol";
+import "../interfaces/IERC721TokenDescriptor.sol";
+import "../interfaces/IERC721FullyOnchain.sol";
 // import "../lib/ERC721Permit.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 
-abstract contract ERC721Primitive is ERC721Mintable, Ownable {
-    address public descriptor;
-
-    constructor(string memory name, string memory symbol) ERC721Mintable(name, symbol) {}
+abstract contract ERC721FullyOnchain is ERC721, Ownable, IERC721FullyOnchain {
+    address public override descriptor;
 
     function setDescriptor(address _descriptor) external onlyOwner {
         descriptor = _descriptor;
@@ -20,10 +19,11 @@ abstract contract ERC721Primitive is ERC721Mintable, Ownable {
         public
         view
         override
+        virtual
         returns (string memory)
     {
         require(_exists(tokenId), "nonexistent token");
-        return ITokenDescriptor(descriptor).tokenURI(this, tokenId);
+        return IERC721TokenDescriptor(descriptor).tokenURI(tokenId);
     }
 
 }

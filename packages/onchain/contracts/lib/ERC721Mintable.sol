@@ -4,17 +4,15 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/AccessControlEnumerable.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "../interfaces/IERC721Mintable.sol";
 
 abstract contract ERC721Mintable is
     IERC721Mintable,
-    ERC721,
+    ERC721Enumerable,
     AccessControlEnumerable
 {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
-    bytes32 public constant BURNER_ROLE = keccak256("BURNER_ROLE");
-
-    uint256 public override totalSupply = 0;
 
     constructor(string memory name_, string memory symbol_)
         ERC721(name_, symbol_)
@@ -61,7 +59,7 @@ abstract contract ERC721Mintable is
         public
         view
         virtual
-        override(AccessControlEnumerable, ERC721, IERC165)
+        override(AccessControlEnumerable, ERC721Enumerable, IERC165)
         returns (bool)
     {
         return
@@ -69,19 +67,4 @@ abstract contract ERC721Mintable is
             ERC721.supportsInterface(interfaceId);
     }
 
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 tokenId
-    ) internal virtual override {
-        super._beforeTokenTransfer(from, to, tokenId);
-
-        if (from == address(0)) {
-            totalSupply++;
-        }
-
-        if (to == address(0)) {
-            totalSupply--;
-        }
-    }
 }
