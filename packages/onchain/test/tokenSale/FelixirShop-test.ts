@@ -12,7 +12,7 @@ should()
 use(smock.matchers)
 
 
-describe("Test.sol", () => {
+describe("FelixirShop.sol", () => {
     let felixirShop: FelixirShop
     let mockERC721: ERC721Mock
     let mockTresuary: TreasuryMock
@@ -122,7 +122,7 @@ describe("Test.sol", () => {
             await felixirShop.connect(user2).sell(options)
             expect(await felixirShop.counter()).to.be.eq(3)
         })
-        it("transfer ETH to treasury per sell", async () => {
+        it("success transfer ETH to treasury per sell", async () => {
             const provider = ethers.provider
             expect((await provider.getBalance(mockTresuary.address)).toNumber()).to.be.eq(0)
             await felixirShop.connect(user1).sell(options)
@@ -131,6 +131,11 @@ describe("Test.sol", () => {
             await felixirShop.connect(user2).sell(options)
             const treasuryBalance2 = await provider.getBalance(mockTresuary.address)
             expect(parseInt(utils.formatEther(treasuryBalance2))).to.be.eq(600)
+        })
+        it("success emit Received event in MockTreasury", async () => {
+            await expect(felixirShop.connect(user1).sell(options))
+                .to.emit(mockTresuary, 'Received')
+                .withArgs(felixirShop.address, "300000000000000000000");   
         })
     })
 })
