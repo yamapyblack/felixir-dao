@@ -1,15 +1,11 @@
 import "@nomiclabs/hardhat-waffle"
 import { ethers } from "hardhat"
-import { providers, utils } from "ethers"
+import { utils } from "ethers"
 import { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
-import { expect, should, use } from "chai"
+import { expect } from "chai"
 import { FelixirShop } from "../../typechain/FelixirShop"
 import { ERC721Mock } from "../../typechain/ERC721Mock"
 import { TreasuryMock } from "../../typechain/TreasuryMock"
-import { FakeContract, smock } from '@defi-wonderland/smock'
-
-should()
-use(smock.matchers)
 
 
 describe("FelixirShop.sol", () => {
