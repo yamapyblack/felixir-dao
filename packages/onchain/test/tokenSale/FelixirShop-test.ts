@@ -21,7 +21,7 @@ describe("FelixirShop.sol", () => {
     let user2: SignerWithAddress
     let other: SignerWithAddress
 
-    const options = {value: utils.parseEther("300.0")}
+    const options = {value: utils.parseEther("1.0")}
    
     beforeEach(async () => {
         [owner, user1, user2, other] = await ethers.getSigners()
@@ -96,14 +96,20 @@ describe("FelixirShop.sol", () => {
             await expect(felixirShop.connect(user1).sell(options)).to.be.revertedWith("Sale has been settled")
         })
         it("fail revert if msg.value under the sell price", async () => {
-            await expect(felixirShop.connect(user1).sell({value: utils.parseEther("299.0")}))
+            await expect(felixirShop.connect(user1).sell({value: utils.parseEther("0.9")}))
                 .to.be.revertedWith("SEND MORE ETH")
         })
+        // this test takes too much time.
         // it("fail revert if counter is more than 8888", async () => {
-        //     const fakeFelixirShop = await smock.fake(felixirShop)
-        //     fakeFelixirShop.counter.returns(8889)
-        //     console.log(await fakeFelixirShop.counter())
-        //     await expect(fakeFelixirShop.connect(user1).sell(options)).to.be.revertedWith("All felixirs have been already sold")
+        //     for (let i = 1; i <= 8889; i++) {
+        //         if (i == 8889) {
+        //             await expect(felixirShop.connect(user1).sell(options))
+        //                 .to.be.revertedWith("All felixirs have been already sold")    
+        //         } else {
+        //             await felixirShop.connect(user1).sell(options)
+        //             expect(await felixirShop.counter()).to.be.eq(i + 1)
+        //         }
+        //     } 
         // })
         it("success transfer token to msg.sender", async () => {
             expect(await mockERC721.balanceOf(user1.address)).to.be.eq(0)
@@ -129,15 +135,15 @@ describe("FelixirShop.sol", () => {
             expect((await provider.getBalance(mockTresuary.address)).toNumber()).to.be.eq(0)
             await felixirShop.connect(user1).sell(options)
             const treasuryBalance1 = await provider.getBalance(mockTresuary.address)
-            expect(parseInt(utils.formatEther(treasuryBalance1))).to.be.eq(300)
+            expect(parseInt(utils.formatEther(treasuryBalance1))).to.be.eq(1)
             await felixirShop.connect(user2).sell(options)
             const treasuryBalance2 = await provider.getBalance(mockTresuary.address)
-            expect(parseInt(utils.formatEther(treasuryBalance2))).to.be.eq(600)
+            expect(parseInt(utils.formatEther(treasuryBalance2))).to.be.eq(2)
         })
         it("success emit Received event in MockTreasury", async () => {
             await expect(felixirShop.connect(user1).sell(options))
                 .to.emit(mockTresuary, 'Received')
-                .withArgs(felixirShop.address, "300000000000000000000");   
+                .withArgs(felixirShop.address, "1000000000000000000");   
         })
     })
 })
