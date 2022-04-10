@@ -49,10 +49,10 @@ describe("FelixirShop.sol", () => {
 
     describe("startSale()", () => {
         it("fail revert if isSaleNow is true", async () => {
-            expect(felixirShop.startSale()).to.be.revertedWith("Sale has already been started")
+            await expect(felixirShop.startSale()).to.be.revertedWith("Sale has already been started")
         })
         it("fail revert if msg.sender is not owner", async () => {
-            expect(felixirShop.connect(other).startSale()).to.be.revertedWith("Ownable: caller is not the owner")      
+            await expect(felixirShop.connect(other).startSale()).to.be.revertedWith("Ownable: caller is not the owner")      
         })
     
         it("success set isSaleNow true", async () => {
@@ -72,10 +72,10 @@ describe("FelixirShop.sol", () => {
     describe("settleSale()", () => {
         it("fail revert if isSaleNow is false", async () => {
             await felixirShop.settleSale()
-            expect(felixirShop.settleSale()).to.be.revertedWith("Sale has already been settled")
+            await expect(felixirShop.settleSale()).to.be.revertedWith("Sale has already been settled")
         })
         it("fail revert if msg.sender is not owner", async () => {
-            expect(felixirShop.connect(other).settleSale()).to.be.revertedWith("Ownable: caller is not the owner")
+            await expect(felixirShop.connect(other).settleSale()).to.be.revertedWith("Ownable: caller is not the owner")
         })
        
         it("success set isSaleNow false", async () => {
@@ -93,16 +93,18 @@ describe("FelixirShop.sol", () => {
     describe("sell()", () => {
         it("fail revert if isSaleNow is false", async () => {
             await felixirShop.settleSale()
-            expect(felixirShop.connect(user1).sell()).to.be.revertedWith("Sale has been settled")
+            await expect(felixirShop.connect(user1).sell(options)).to.be.revertedWith("Sale has been settled")
         })
         it("fail revert if msg.value under the sell price", async () => {
-            expect(felixirShop.connect(user1).sell({value: utils.parseEther("299.0")}))
+            await expect(felixirShop.connect(user1).sell({value: utils.parseEther("299.0")}))
+                .to.be.revertedWith("SEND MORE ETH")
         })
-        it("fail revert if counter is more than 8880", async () => {
-            const fakeFelixirShop = await smock.fake("FelixirShop") as FakeContract<FelixirShop>
-            fakeFelixirShop.counter.returns(8881)
-            expect(fakeFelixirShop.sell()).to.be.revertedWith("All felixirs have been already sold")
-        })
+        // it("fail revert if counter is more than 8888", async () => {
+        //     const fakeFelixirShop = await smock.fake(felixirShop)
+        //     fakeFelixirShop.counter.returns(8889)
+        //     console.log(await fakeFelixirShop.counter())
+        //     await expect(fakeFelixirShop.connect(user1).sell(options)).to.be.revertedWith("All felixirs have been already sold")
+        // })
         it("success transfer token to msg.sender", async () => {
             expect(await mockERC721.balanceOf(user1.address)).to.be.eq(0)
             expect(await mockERC721.balanceOf(user2.address)).to.be.eq(0)
