@@ -33,7 +33,7 @@ contract FelixirShop is Ownable, ReentrancyGuard {
     /// @notice Users can purchase a token with this function
     function sell() external payable nonReentrant {
         require(isSaleNow, "Sale has been settled");
-        require(msg.value >= 300 ether, "SEND MORE ETH");
+        require(msg.value >= 1 ether, "SEND MORE ETH");
         require(counter <= 8888, "All felixirs have been already sold");
 
         IERC721Mintable(felixirs).mint(msg.sender, counter);
