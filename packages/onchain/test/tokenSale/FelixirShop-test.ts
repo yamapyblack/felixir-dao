@@ -43,59 +43,35 @@ describe("FelixirShop.sol", () => {
         })
     })
 
-    describe("startSale()", () => {
-        it("fail revert if isSaleNow is true", async () => {
-            await expect(felixirShop.startSale()).to.be.revertedWith("Sale has already been started")
+    describe("setSale()", () => {
+        it("fail revert if msg.sender is not the contract owner", async () => {
+            await expect(felixirShop.connect(other).setSale(false)).to.be.revertedWith("Ownable: caller is not the owner")
         })
-        it("fail revert if msg.sender is not owner", async () => {
-            await expect(felixirShop.connect(other).startSale()).to.be.revertedWith("Ownable: caller is not the owner")      
-        })
-    
-        it("success set isSaleNow true", async () => {
-            await felixirShop.settleSale()
-            expect(await felixirShop.isSaleNow()).to.be.eq(false)
-            await felixirShop.startSale()
+        it("fail revert if param _isSaleNow has same status with isSaleNow", async () => {
             expect(await felixirShop.isSaleNow()).to.be.eq(true)
+            await expect(felixirShop.setSale(true)).to.be.revertedWith("The sale has already been started/settled")
+            await felixirShop.setSale(false)
+            await expect(felixirShop.setSale(false)).to.be.revertedWith("The sale has already been started/settled")
         })
-        it("success emit SaleStarted event", async () => {
-            await felixirShop.settleSale()
-            await expect(felixirShop.startSale())
-                .to.emit(felixirShop, 'SaleStarted')
-                .withArgs(owner.address);
-        })
-    })
-
-    describe("settleSale()", () => {
-        it("fail revert if isSaleNow is false", async () => {
-            await felixirShop.settleSale()
-            await expect(felixirShop.settleSale()).to.be.revertedWith("Sale has already been settled")
-        })
-        it("fail revert if msg.sender is not owner", async () => {
-            await expect(felixirShop.connect(other).settleSale()).to.be.revertedWith("Ownable: caller is not the owner")
-        })
-       
-        it("success set isSaleNow false", async () => {
+        it("success update setSale", async () => {
             expect(await felixirShop.isSaleNow()).to.be.eq(true)
-            await felixirShop.settleSale()
+            await felixirShop.setSale(false)
             expect(await felixirShop.isSaleNow()).to.be.eq(false)
-        })
-        it("success emit SaleSettled event", async () => {
-            await expect(felixirShop.settleSale())
-                .to.emit(felixirShop, "SaleSettled")
-                .withArgs(owner.address)
+            await felixirShop.setSale(true)    
+            expect(await felixirShop.isSaleNow()).to.be.eq(true)
         })
     })
 
     describe("sell()", () => {
         it("fail revert if isSaleNow is false", async () => {
-            await felixirShop.settleSale()
+            await felixirShop.setSale(false)
             await expect(felixirShop.connect(user1).sell(options)).to.be.revertedWith("Sale has been settled")
         })
-        it("fail revert if msg.value under the sell price", async () => {
+        it("fail revert if msg.value is not tokenPrice", async () => {
             await expect(felixirShop.connect(user1).sell({value: utils.parseEther("0.9")}))
                 .to.be.revertedWith("SEND MORE ETH")
         })
-        // this test takes too much time.
+        //this test takes too much time.
         // it("fail revert if counter is more than 8888", async () => {
         //     for (let i = 1; i <= 8889; i++) {
         //         if (i == 8889) {
