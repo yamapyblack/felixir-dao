@@ -1,5 +1,39 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
+/*************************************************************************************
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░███████████████░░░░░░░░░░░░░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░██████░░░░░░░░░░░░░░░██████░░░░░░░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░███░░░░░░░░░░░░░░░░░░░░░░░░░░░███░░░░░░ *
+ * ░░░░░░██████░░░░░░███░░░░░░░░░███░░░░░░███░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░███░░░ *
+ * ░░░███░░░░░░███░░░██████░░░██████░░░░░░███░░░░░░░░░███░░░░░░░░░░░░░░░░░░░░░███░░░ *
+ * ░░░███░░░░░░░░░░░░███░░░███░░░███░░░░░░███░░░░░░███░░░███░░░░░░░░░░░░███░░░███░░░ *
+ * ░░░███░░░██████░░░███░░░███░░░███░░░░░░███░░░███░░░░░░░░░███░░░░░░░░░░░░██████░░░ *
+ * ░░░███░░░░░░███░░░███░░░░░░░░░███░░░░░░░░░██████░░░██████░░░███░░░███░░░░░░███░░░ *
+ * ░░░░░░██████░░░░░░███░░░░░░░░░███░░░░░░░░░░░░███░░░   ░░░░░░░░░███░░░███░░░███░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░███░░░   ░░░░░░░░░░░░░░░██████░░░░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░███░░░░░░░░░░░░░░░░░░██████░░░░░░░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░███░░░░░░░░░██████░░░░░░░░░░░░░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░█████████░░░░░░░░░░░░░░░░░░░░░ *
+ * ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ *
+**************************************************************************************/
+
+// LICENSE
+// FelixirExecutor.sol is a modified version of Compound Lab's Timelock and NounsDAO's NounsDAOExecutor.sol:
+// https://github.com/compound-finance/compound-protocol/blob/20abad28055a2f91df48a90f8bb6009279a4cb35/contracts/Timelock.sol
+// https://github.com/nounsDAO/nouns-monorepo/blob/master/packages/nouns-contracts/contracts/governance/NounsDAOExecutor.sol
+//
+// Timelock.sol source code Copyright 2020 Compound Labs, Inc. licensed under the BSD-3-Clause license.
+// NounsDAOExecutor.sol source code Copyright 2022 NounsDAO, Inc. licensed under the BSD-3-Clause license.
+// With modifications by FelixirDAO.
+//
+// Additional conditions of BSD-3-Clause can be found here: https://opensource.org/licenses/BSD-3-Clause
+//
+// MODIFICATIONS
+// FelixirExecutor.sol modifies NounsDAOExecutor to add admin and login addresses.
+// NounsDAOExecutor refferes to Compound's Timelock.sol.
+// This contract acts as executor of FelixirDAO governance and its treasury.
+
 pragma solidity 0.8.13;
 
 contract FelixirExecutor {
