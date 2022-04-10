@@ -34,7 +34,7 @@ contract FelixirShop is Ownable, ReentrancyGuard {
     function sell() external payable nonReentrant {
         require(isSaleNow, "Sale has been settled");
         require(msg.value >= 300 ether, "SEND MORE ETH");
-        require(counter <= 8880, "All felixirs have been already sold");
+        require(counter <= 8888, "All felixirs have been already sold");
 
         IERC721Mintable(felixirs).mint(msg.sender, counter);
 
