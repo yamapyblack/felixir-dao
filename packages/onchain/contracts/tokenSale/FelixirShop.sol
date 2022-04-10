@@ -30,6 +30,7 @@ contract FelixirShop is Ownable, ReentrancyGuard {
         startSale();
     }
 
+    /// @notice Users can purchase a token with this function
     function sell() external payable nonReentrant {
         require(isSaleNow, "Sale has been settled");
         require(msg.value >= 300 ether, "SEND MORE ETH");
@@ -45,13 +46,14 @@ contract FelixirShop is Ownable, ReentrancyGuard {
         }
     }
     
-
+    /// @notice The contract owner can start the sale
     function startSale() public onlyOwner {
         require(!isSaleNow, "Sale has already been started");
         isSaleNow = true;
         emit SaleStarted(msg.sender);
     }
-
+    
+    /// @notice The contract owner can settle the sale
     function settleSale() external onlyOwner {
         require(isSaleNow, "Sale has already been settled");
         isSaleNow = false;
