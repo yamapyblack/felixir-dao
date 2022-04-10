@@ -14,3 +14,5 @@ export const evmMine = async (num: number): Promise<void> => {
 export const getBlockNumber = async (): Promise<number> => {
   return ethers.provider.getBlockNumber()
 }
+
+export const NilAddress = "0x0000000000000000000000000000000000000000";

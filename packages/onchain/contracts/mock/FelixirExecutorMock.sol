@@ -7,7 +7,7 @@ import "../governance/FelixirExecutor.sol";
 contract FelixirExecutorMock is FelixirExecutor {
     uint addedTime = 0;
 
-    constructor(address admin_) FelixirExecutor(admin_) {
+    constructor() FelixirExecutor() {
     }
     
     function getBlockTimestamp() internal override view returns (uint256) {
