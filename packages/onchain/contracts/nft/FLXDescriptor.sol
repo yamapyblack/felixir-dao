@@ -10,7 +10,7 @@ import {Base64} from "@openzeppelin/contracts/utils/Base64.sol";
 import {MultiPartRLEToSVG} from "../lib/MultiPartRLEToSVG.sol";
 import {NFTDescriptor} from "../lib/NFTDescriptor.sol";
 
-contract FLXDescriptor is Ownable, IFLXDescriptor, PaletteStorage {
+abstract contract FLXDescriptor is Ownable, IFLXDescriptor, PaletteStorage {
     using Strings for uint256;
 
     string name;
@@ -26,16 +26,13 @@ contract FLXDescriptor is Ownable, IFLXDescriptor, PaletteStorage {
         description = _description;
     }
 
-    // TODO yamaura
     function getSeedAndPalettes(uint256 _tokenId)
         public
         view
         virtual
         override
         returns (bytes memory, string[] memory)
-    {
-        return (seeds[0], palettes[0]);
-    }
+    {}
 
     function generateName(uint256 tokenId)
         public
@@ -75,28 +72,13 @@ contract FLXDescriptor is Ownable, IFLXDescriptor, PaletteStorage {
         }
     }
 
-    // TODO yamaura
-    function generateAttributes(uint256 tokenId)
+    function generateAttributes(uint256 _tokenId)
         public
         view
         virtual
         override
         returns (string memory)
-    {
-        string[3] memory attributes = ["hp", "at", "df"];
-        string[3] memory values = ["hoge", "10", "100"];
-        bool[3] memory isInts = [false, true, true];
-
-        string memory ret = "";
-        for (uint8 i = 0; i < values.length; i++) {
-            if (i > 0) {
-                ret = string(abi.encodePacked(ret, ","));
-            }
-            ret = _buildAttributes(ret, attributes[i], values[i], isInts[i]);
-        }
-
-        return ret;
-    }
+    {}
 
     // prettier-ignore
     function generateImage(uint256 tokenId)

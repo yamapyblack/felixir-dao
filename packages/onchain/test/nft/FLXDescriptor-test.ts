@@ -11,7 +11,7 @@ import { FLXDescriptor } from "../../typechain/FLXDescriptor";
 // import { NFTDescriptor } from "../typechain/NFTDescriptor";
 
 const OUT_SVG_FILE = "images/encoder.svg";
-const INPUT_SVG_FILE = "images/image5.png"
+const INPUT_SVG_FILE = "images/chr_all_2.png"
 const INPUT_SVG_FILE2 = "images/image6.png"
 
 describe("FLXDescriptor-test", async () => {
@@ -63,7 +63,7 @@ describe("FLXDescriptor-test", async () => {
       await c.addBulkColorsToPalette(0, palettes);
       await c.setSeed(0, seed);
 
-      // const svg = await c.generateImage(0);
+      const svg = await c.generateImage(0);
       // const svg2 = ethers.utils.toUtf8String(ethers.utils.base64.decode(svg));
       // console.log(svg2)
       // await fs.writeFile(OUT_SVG_FILE, svg2);
