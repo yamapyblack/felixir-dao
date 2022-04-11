@@ -29,7 +29,7 @@ contract FelixirShop is Ownable, ReentrancyGuard {
     }
 
     /// @notice Users can purchase a token with this function
-    function sell() external payable nonReentrant {
+    function buy() external payable nonReentrant {
         require(isSaleNow, "Sale has been settled");
         require(msg.value == tokenPrice, "SEND MORE ETH");
         require(counter <= totalSupply, "All felixirs have been already sold");
