@@ -5,6 +5,9 @@
 // Runtime Environment's members available in the global scope.
 import { ethers } from "hardhat";
 
+import { waffle } from "hardhat";
+const { deployContract } = waffle;
+
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
   // line interface.
@@ -12,6 +15,15 @@ async function main() {
   // If this script is run directly using `node` you may want to call compile
   // manually to make sure everything is compiled
   // await hre.run('compile');
+
+  // const Greeter = require("../../artifacts/contracts/Greeter.sol/Greeter.json");
+
+  // //deploy
+  // const tx = await deployContract(signer, Greeter, ["hello"], {
+  //     gasPrice: 81000000000,
+  //     nonce: 55,
+  // });
+  // console.log(tx.address)
 
   // We get the contract to deploy
   const Greeter = await ethers.getContractFactory("Greeter");

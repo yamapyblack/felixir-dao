@@ -1,0 +1,8 @@
+export const Addr = {
+    Deployer: "0x6C4502B639ab01Cb499cEcCA7D84EB21Fde928F8",
+    NFTDescriptor: "0xBf48fbb9FD7162054C281ad0283CA196e21938eB",
+    FLXPrimitive: "0x4b3DeA2232fB8E5419CfacF9f633bf638267699a",
+    FLXDescriptorPrimitive: "0xcd5A2BA5883CBFc341094f8fcdF96e9b18F6B529",
+    FelixirShop: "0x151d442787dEca43B6A36C31ef83A00DBb65B573",
+};
+
