@@ -101,6 +101,6 @@ const Home: NextPage = () => {
       <Footer />
     </div>
   )
-}
+} 
 
 export default Home
