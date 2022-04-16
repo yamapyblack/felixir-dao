@@ -12,45 +12,63 @@ declare global {
 }
 
 const Home: NextPage = () => {
-  const mintNumber = 0;
+  let mintNumber = 0;
   const [isThumbnail, setIsThumbnail] = useState(true);
+  const mintFlag = false;
+  const tokenPrice = 0.1;
   // add Network
   function addChain() {
     try{
       (window as any).ethereum.request({
         method: 'wallet_addEthereumChain',
         params: [{
-          chainId: '0x13881',
-          chainName: 'mumbai',
+          chainId: '0x250',
+          chainName: 'Astar Network',
           nativeCurrency: {
-              name: 'MATIC',
-              symbol: 'MATIC',
-              decimals: 18,
+              name: 'ASTR',
+              symbol: 'ASTR',
+              decimals: 592,
           },
-          rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+          rpcUrls: ['https://astar.api.onfinality.io/public'],
         }],
       })
     }catch(Exeption){
       console.log("Astar Network already Connected");
     } 
+    //   (window as any).ethereum.request({
+    //     method: 'wallet_addEthereumChain',
+    //     params: [{
+    //       chainId: '0x13881',
+    //       chainName: 'mumbai',
+    //       nativeCurrency: {
+    //           name: 'MATIC',
+    //           symbol: 'MATIC',
+    //           decimals: 18,
+    //       },
+    //       rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
+    //     }],
+    //   })
+    // }catch(Exeption){
+    //   console.log("Astar Network already Connected");
+    // } 
   };
   addChain();
 
   // ミントボタン用
   function MintButton() {
     const MetaMuskConnect = async () =>{
+      addChain();
       const provider = new ethers.providers.Web3Provider((window as any).ethereum)
   
       const accounts =  await provider.send("eth_requestAccounts", []);
       
       const signer = provider.getSigner()
       const abi = [
-        "function greet() view returns (string memory)",
-        "function setGreeting(string memory _greeting)"
+        "function buy() external payable nonReentrant"  
         ]
-      const contractAddress = "0xab8256Fe5E2cD26Be3ECE69b5E421e63664b938e"
+      const contractAddress = "0x9d8148d2382eaF2c2E917a34341e7A38Aa7Cb120"
       const contract = new ethers.Contract(contractAddress, abi, signer);
-      addChain();
+      contract.buy({value: ethers.utils.parseEther("0.1")});
     };
     return <>
     <div className="flex item-center border-gray-600 h-96">
@@ -63,8 +81,16 @@ const Home: NextPage = () => {
           <h3 className="text-4xl pt-1 text-white font-semibold ">April 18th</h3>
           <h1 className="text-5xl pt-1 text-white font-semibold "></h1>
           <h1 className="text-5xl pt-1 pb-2 text-white font-semibold "> {mintNumber} / 4000</h1>
-          <button className="px-2 py-1 my-1 text-2xl text-white font-semibold rounded-full bg-rose-700" onClick={MetaMuskConnect}>NFT MINT</button>
-        </div>
+          {(() => {
+            if (!mintFlag) {
+              return <button id="mintButton" className="px-2 py-1 my-1 text-2xl text-white font-semibold rounded-full bg-rose-700" onClick={MetaMuskConnect}>NFT MINT</button>       
+            } else if(mintNumber == 4000){
+              return <h3 className="text-3xl pt-1 text-white font-semibold ">End of sale</h3>
+            } else {
+              return <h3 className="text-3xl pt-1 text-white font-semibold ">Wait till the sale</h3>
+            }
+          })()} 
+          </div>
       </div>
       <div className="flex-1 text-left px-4 py-2 m-2 pt-12">
         <Image className="" src="/fel_1.png" alt="chara2"  width={256} height={256} objectFit="contain"/>
