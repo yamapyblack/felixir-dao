@@ -5,8 +5,6 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Header from './components/Header';
 import Footer from './components/Footer';
-import timezone from "dayjs/plugin/timezone";
-import utc from "dayjs/plugin/utc";
 
 declare global {
   interface Window {
@@ -18,7 +16,7 @@ const Home: NextPage = () => {
   let mintNumber = 0;
   let mintFlag:boolean = false;
   const tokenPrice = "0.1";
-  
+
   // add Network
   function addChain() {
     try{
@@ -51,12 +49,16 @@ const Home: NextPage = () => {
       
       const signer = provider.getSigner()
       const abi = [
-        "function buy() external payable nonReentrant"  
+        "function buy() external payable nonReentrant",
+        "function isSaleNow() returns(bool)",
+        "function counter() returns(bool)"
         ]
       const contractAddress = "0x9d8148d2382eaF2c2E917a34341e7A38Aa7Cb120"
       const contract = new ethers.Contract(contractAddress, abi, signer);
-      //mintNumber = contract.counter();
-      //mintFlag = contract.
+      mintNumber = contract.counter();
+      mintFlag = contract.isSaleNow();
+      console.log(mintNumber);
+      console.log(mintFlag);
       contract.buy({value: ethers.utils.parseEther(tokenPrice)});
     };
     return <>
