@@ -13,7 +13,8 @@
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-modal": "^3.14.4",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "video-react": "^0.15.0"
   },
   "devDependencies": {
     "@types/node": "17.0.23",
