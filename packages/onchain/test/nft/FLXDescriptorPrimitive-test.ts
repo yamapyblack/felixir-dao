@@ -35,8 +35,10 @@ describe("FLXDescriptorPrimitive-test", async () => {
     const FLXDescriptorPrimitive = await ethers.getContractFactory("FLXDescriptorPrimitive", {
       libraries: { NFTDescriptor: c0.address },
     });
-    c = (await FLXDescriptorPrimitive.deploy(c2.address)) as FLXDescriptorPrimitive;
+    c = (await FLXDescriptorPrimitive.deploy()) as FLXDescriptorPrimitive;
     await c.deployed();
+
+    await c.setToken(c2.address)
   });
 
   describe("test", async () => {
@@ -81,17 +83,17 @@ describe("FLXDescriptorPrimitive-test", async () => {
         await c.setSeed(i, seed);  
       }
 
-
-      const s = await c.seeds(14)
-      console.log(s)
-      const p = await c.palettes(14,0)
-      console.log(p)
+      // const s = await c.seeds(14)
+      // console.log(s)
+      // const p = await c.palettes(14,0)
+      // console.log(p)
 
       const svg = await c.generateImage(0);
-      console.log(svg)
+      // console.log(svg)
       const svg2 = ethers.utils.toUtf8String(ethers.utils.base64.decode(svg));
-      console.log(svg2)
+      // console.log(svg2)
       await fs.writeFile(OUT_SVG_FILE, svg2);
+
     });
 
   });

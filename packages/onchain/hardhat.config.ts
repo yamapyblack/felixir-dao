@@ -10,7 +10,6 @@ const accounts = (): HttpNetworkAccountsConfig => {
   if (!process.env.PRIV_KEY) {
     return "remote"
   }
-  console.log("Loaded key from environment");
   return [process.env.PRIV_KEY!]
 };
 

@@ -12,16 +12,15 @@ contract FLXDescriptorPrimitive is FLXDescriptor {
 
     IERC721Junction public token;
 
-    constructor(address _token) {
-        token = IERC721Junction(_token);
-    }
+    constructor() {}
 
     uint8 constant CAP = 48;
     string constant PREFIX1 = "PREFIX1";
     string constant PREFIX2 = "PREFIX2";
+    string constant PREFIX3 = "PREFIX3";
 
-    string[] ATTRIBUTES = ['tribe', 'color', 'felix'];
-    bool[] IS_INT = [false, false, false];
+    string[] ATTRIBUTES = ['tribe', 'guardian beast', 'felix word'];
+    bool[] IS_INT = [false, false, false, false];
 
     string[] TRIBES = [
         'Hulan',
@@ -37,13 +36,20 @@ contract FLXDescriptorPrimitive is FLXDescriptor {
         'Miakiss',
         'Tabbit'
     ];
-    string[] COLORS = [
-        'A',
-        'B',
-        'C',
-        'D'
-    ];    
-    string[] FELIX = [
+    string [] GUARDIAN_BEAST = [
+        'Basmu',
+        'Usumgallu',
+        'Musmahhu',
+        'Mushussu',
+        'Lahmu',
+        'Ugallu',
+        'Uridimmu',
+        'Girtablullu',
+        'Umu dabrutu',
+        'Kulullu',
+        'Kusarikku'
+    ];
+    string[] FELIX_WORD = [
         "wogr",
         "ur",
         "fe",
@@ -90,7 +96,7 @@ contract FLXDescriptorPrimitive is FLXDescriptor {
     {
         console.log(getSeedIdx(_tokenId));
         // console.log(seeds[getSeedIdx(_tokenId)]);
-        console.log(palettes[getSeedIdx(_tokenId)][0]);
+        // console.log(palettes[getSeedIdx(_tokenId)][0]);
         return (seeds[getSeedIdx(_tokenId)], palettes[getSeedIdx(_tokenId)]);
     }
 
@@ -103,10 +109,8 @@ contract FLXDescriptorPrimitive is FLXDescriptor {
     {
         string[3] memory values = [
             TRIBES[getSeedIdx(_tokenId) / 4],
-            COLORS[getSeedIdx(_tokenId) % 4],
-            FELIX[
-                random(_tokenId, PREFIX2) % FELIX.length
-            ]
+            GUARDIAN_BEAST[random(_tokenId, PREFIX2) % GUARDIAN_BEAST.length],
+            FELIX_WORD[random(_tokenId, PREFIX3) % FELIX_WORD.length]
         ];
 
         string memory ret = "";
