@@ -11,7 +11,7 @@ const customStyles = {
     right                 : 'auto',
     bottom                : 'auto',
     marginRight           : '-50%',
-    width                 : '1000px',
+    width                 : '1300px',
     height                : '500px',
     transform             : 'translate(-50%, -50%)'
   }
@@ -50,9 +50,23 @@ const App = () => {
           // スタイリングを定義
           style={customStyles}
         >
-
-          <h2>Hello</h2>
-          <button onClick={closeModal}>close</button>
+          <button onClick={closeModal}>✖︎</button>
+          <div className='container'>
+              <div className='grid grid-cols-2 gap-12 space-x-4 space-y-4'>                  
+                <Image src="/sampleChara.png" width={500} height={400} />
+                <div className='grid grid-cols-3 gap-4 space-x-1 space-y-1'>
+                    <Image src="/sampleChara.png" width={80} height={50} />
+                    <Image src="/sampleChara.png" width={80} height={50} />
+                    <Image src="/sampleChara.png" width={80} height={50} />
+                    <Image src="/sampleChara.png" width={80} height={50} />
+                    <Image src="/sampleChara.png" width={80} height={50} />
+                    <Image src="/sampleChara.png" width={80} height={50} />
+                    <Image src="/sampleChara.png" width={80} height={50} />
+                    <Image src="/sampleChara.png" width={80} height={50} />
+                    <Image src="/sampleChara.png" width={80} height={50} />
+                </div>
+              </div>
+          </div>
         </Modal>
       </>
     )
