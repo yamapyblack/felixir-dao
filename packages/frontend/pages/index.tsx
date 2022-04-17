@@ -81,8 +81,6 @@ const Home: NextPage = () => {
 
   }, []);
 
-
-
   // ミントボタン用
   function MintButton() {
     console.log("MintButton")
@@ -101,20 +99,20 @@ const Home: NextPage = () => {
     };
 
     return <>
-    <div className="flex item-center border-gray-600 h-96">
+    <div className="flex item-center border-gray-600 lg:h-96">
       <div className="flex-1 text-right py-2 m-2 pt-16">
         <Image className="" src="/fel_2.png" alt="chara1"  width={256} height={256} objectFit="contain"/>
       </div>
       <div className="flex-1 px-4 py-2 m-2 pt-16">
         <div className="flex-1 border-double border-4 rounded-md bg-sky-500 px-4 py-2 m-2">
-          <h3 className="text-4xl text-white font-semibold ">NFT Initial Sale</h3>
-          <h1 className="text-2xl pt-1 text-white font-semibold ">START DATE: April 18th</h1>
-          <h1 className="text-2xl pt-1 text-white font-semibold ">14:00(UTC) | 23:00(JST)</h1>
-          <h1 className="text-5xl pt-1 pb-2 text-white font-semibold "> {mintNum} / 4000</h1>
+          <h3 className="sm:text-1xl lg:text-4xl text-white font-semibold ">NFT Initial Sale</h3>
+          <h1 className="sm:text-lg lg:text-2xl pt-1 text-white font-semibold ">START DATE: April 18th</h1>
+          <h1 className="sm:text-lg lg:text-2xl pt-1 text-white font-semibold ">14:00(UTC) | 23:00(JST)</h1>
+          <h1 className="sm:text-2xl lg:text-5xl pt-1 pb-2 text-white font-semibold "> {mintNum} / 4000</h1>
 
-          { !saleFlag && <h3 className="text-3xl pt-1 text-white font-semibold ">Wait until the sale</h3>}
-          { (saleFlag && mintNum < 4000) && <button id="mintButton" className="px-2 py-1 my-1 text-2xl text-white font-semibold rounded-full bg-rose-700" onClick={MetaMuskConnect}>NFT MINT</button>}
-          { (saleFlag && mintNum >= 4000) && <h3 className="text-3xl pt-1 text-white font-semibold ">End of sale</h3>}
+          { !saleFlag && <h3 className="sm:text-lg lg:text-3xl pt-1 text-white font-semibold ">Wait until the sale</h3>}
+          { (saleFlag && mintNum < 4000) && <button id="mintButton" className="px-2 py-1 my-1 sm:text-lg lg:text-2xl text-white font-semibold rounded-full bg-rose-700" onClick={MetaMuskConnect}>NFT MINT</button>}
+          { (saleFlag && mintNum >= 4000) && <h3 className="sm:text-lg lg:text-3xl pt-1 text-white font-semibold ">End of sale</h3>}
 
           </div>
       </div>
