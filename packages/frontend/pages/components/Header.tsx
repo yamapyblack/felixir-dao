@@ -10,7 +10,7 @@ import Image from 'next/image'
                     <Image className="" src="/FelixirDAO-logo.png" alt="chara1"  width={150} height={50} objectFit="contain"/>
                 </div>
                 <div className='justify-end flex'>
-                    <div className="rounded-full px-3 py-1 my-3 text-slate-100  hover:bg-rose-700"><a href="/">Mint NFT</a></div>
+                    <div className="rounded-full px-3 py-1 my-3 text-slate-100"><a href="/">Mint NFT</a></div>
                 </div>
                 </div>
             </nav>
