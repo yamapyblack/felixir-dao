@@ -17,15 +17,13 @@ const abi = [
   "function isSaleNow() view returns(bool)",
   "function counter() view returns(uint)"
 ]
-// TODO yamaura
-const contractAddress = "0x40581657AD36237baE43B7B2A67a63dfd31111b5"
+const contractAddress = "0x58b639746E3e848b837F842ADf3771CFc2FCA805"
 
 const Home: NextPage = () => {
   // let mintNumber = 0;
   // let mintFlag:boolean = false;
 
-  //TODO yamaura
-  const tokenPrice = "0.1";
+  const tokenPrice = "100";
 
   const [mintNum, setMintNum] = useState(0);
   const [saleFlag, setSaleFlag] = useState(false);
