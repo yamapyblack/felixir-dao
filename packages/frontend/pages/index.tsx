@@ -54,31 +54,36 @@ const Home: NextPage = () => {
       }
     }
 
-    setSaleInfo();
+      // add Network
+    const addChain = async() => {
+      try{
+        await (window as any).ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [{
+            chainId: '0x250',
+            chainName: 'Astar Network',
+            nativeCurrency: {
+                name: 'ASTR',
+                symbol: 'ASTR',
+                decimals: 592,
+            },
+            rpcUrls: ['https://astar.api.onfinality.io/public'],
+          }],
+        })
+        console.log("try");
+        setSaleInfo();
+      }catch(Exeption){
+        console.log("Astar Network already Connected");
+        console.log("catch");
+      }finally{
+        console.log("finally");
+      }
+    }
+    addChain();
+
   }, []);
 
 
-  // add Network
-  function addChain() {
-    try{
-      (window as any).ethereum.request({
-        method: 'wallet_addEthereumChain',
-        params: [{
-          chainId: '0x250',
-          chainName: 'Astar Network',
-          nativeCurrency: {
-              name: 'ASTR',
-              symbol: 'ASTR',
-              decimals: 592,
-          },
-          rpcUrls: ['https://astar.api.onfinality.io/public'],
-        }],
-      })
-    }catch(Exeption){
-      console.log("Astar Network already Connected");
-    } 
-  }
-  addChain();
 
   // ミントボタン用
   function MintButton() {
@@ -87,7 +92,7 @@ const Home: NextPage = () => {
     const MetaMuskConnect = async () =>{
       console.log("MetaMuskConnect")
 
-      addChain();
+      // addChain();
       const provider = new ethers.providers.Web3Provider((window as any).ethereum)
   
       const accounts =  await provider.send("eth_requestAccounts", []);
