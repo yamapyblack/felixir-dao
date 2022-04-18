@@ -5,6 +5,7 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import Header from './components/Header';
 import Footer from './components/Footer';
+import toast, { Toaster } from 'react-hot-toast'
 
 declare global {
   interface Window {
@@ -18,6 +19,7 @@ const abi = [
   "function counter() view returns(uint)"
 ]
 const contractAddress = "0x58b639746E3e848b837F842ADf3771CFc2FCA805"
+const notify = () => toast('Starting to execute a transaction')
 
 const Home: NextPage = () => {
   // let mintNumber = 0;
@@ -52,7 +54,7 @@ const Home: NextPage = () => {
       }
     }
 
-      // add Network
+    // add Network
     const addChain = async() => {
       try{
         await (window as any).ethereum.request({
@@ -81,14 +83,15 @@ const Home: NextPage = () => {
 
   }, []);
 
+  
+
   // ミントボタン用
   function MintButton() {
     console.log("MintButton")
 
     const MetaMuskConnect = async () =>{
       console.log("MetaMuskConnect")
-
-      // addChain();
+      
       const provider = new ethers.providers.Web3Provider((window as any).ethereum)
   
       const accounts =  await provider.send("eth_requestAccounts", []);
@@ -96,22 +99,24 @@ const Home: NextPage = () => {
       const signer = provider.getSigner()
       const contract = new ethers.Contract(contractAddress, abi, signer);
       contract.buy({value: ethers.utils.parseEther(tokenPrice)});
+      toast('Starting to execute a transaction')
     };
-
+    
     return <>
     <div className="flex item-center border-gray-600 lg:h-96">
       <div className="flex-1 text-right py-2 m-2 pt-16">
         <Image className="" src="/fel_2.png" alt="chara1"  width={256} height={256} objectFit="contain"/>
       </div>
-      <div className="flex-1 px-4 py-2 m-2 pt-16">
+      <div className="flex-1 text-center px-4 py-2 m-2 pt-16">
         <div className="flex-1 border-double border-4 rounded-md bg-sky-500 px-4 py-2 m-2">
           <h3 className="sm:text-1xl lg:text-4xl text-white font-semibold ">NFT Initial Sale</h3>
           <h1 className="sm:text-lg lg:text-2xl pt-1 text-white font-semibold ">START DATE: April 18th</h1>
           <h1 className="sm:text-lg lg:text-2xl pt-1 text-white font-semibold ">14:00(UTC) | 23:00(JST)</h1>
           <h1 className="sm:text-2xl lg:text-5xl pt-1 pb-2 text-white font-semibold "> {mintNum} / 4000</h1>
-
+                    
           { !saleFlag && <h3 className="sm:text-lg lg:text-3xl pt-1 text-white font-semibold ">Wait until the sale</h3>}
           { (saleFlag && mintNum < 4000) && <button id="mintButton" className="px-2 py-1 my-1 sm:text-lg lg:text-2xl text-white font-semibold rounded-full bg-rose-700" onClick={MetaMuskConnect}>NFT MINT</button>}
+          { (saleFlag && mintNum < 4000 && <Toaster/>)}
           { (saleFlag && mintNum >= 4000) && <h3 className="sm:text-lg lg:text-3xl pt-1 text-white font-semibold ">End of sale</h3>}
 
           </div>
@@ -125,7 +130,7 @@ const Home: NextPage = () => {
 
   function FelixierVideo(){
     return <>
-      <div className='flex border-gray-600 h-96'>
+      <div className='flex border-gray-600 lg:h-96'>
         <div className="flex-1 text-center px-4 py-2 m-2 pt-12"></div>
           <div className="flex-1 pr-8 pt-12">
             <iframe width="100%" height="100%"
