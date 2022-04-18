@@ -98,7 +98,7 @@ const Home: NextPage = () => {
       
       const signer = provider.getSigner()
       const contract = new ethers.Contract(contractAddress, abi, signer);
-      contract.buy({value: ethers.utils.parseEther(tokenPrice)});
+      await contract.buy({value: ethers.utils.parseEther(tokenPrice)});
       toast('Starting to execute a transaction')
     };
     
